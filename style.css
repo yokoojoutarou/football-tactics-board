@@ -1,0 +1,162 @@
+/* ベース */
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f0f0f0;
+}
+
+h1 {
+  color: #333;
+}
+
+/* ツールバー */
+#toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+#toolbar button {
+  padding: 6px 10px;
+}
+#toolbar input[type="range"] {
+  width: 120px;
+}
+
+/* 戦術ボード全体のコンテナ */
+#tactics-board {
+  position: relative; /* 子要素を絶対位置で配置するための基準 */
+  /* 横向き（実ピッチ比 105:68 ≈ 1.54）に近い比率 */
+  width: 1000px;
+  height: 650px;
+  border: 2px solid #555;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* サッカーフィールド */
+#field {
+  width: 100%;
+  height: 100%;
+  background-color: #28a745; /* 芝生の色 */
+  border: 5px solid white; /* タッチライン・ゴールライン */
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden; /* 選手がはみ出ないように */
+}
+
+/* 描画キャンバス（フィールド全面に被せる） */
+#drawLayer {
+  position: absolute;
+  inset: 0; /* top/right/bottom/left: 0 */
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* デフォルトは操作不可。描画モード時にJSで有効化 */
+  z-index: 2; /* 線より前、駒より後ろにしたい場合は値を調整 */
+}
+
+/* センターサークル (疑似要素で描画) */
+#field::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+  border: 3px solid white;
+  border-radius: 50%;
+}
+
+/* ハーフウェイライン (疑似要素で描画) - 縦線 */
+#field::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 100%;
+  background-color: white;
+}
+
+/* 選手のコマ */
+.player {
+  position: absolute; /* フィールド内での絶対位置を指定 */
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  font-size: 12px; /* 2桁番号も収まるサイズ */
+  cursor: grab; /* ドラッグできることを示すカーソル */
+  user-select: none; /* テキスト選択を無効に */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  z-index: 3; /* キャンバスより前面 */
+}
+
+.player.dragging {
+  cursor: grabbing;
+  opacity: 0.8;
+  z-index: 1000; /* ドラッグ中は最前面に表示 */
+}
+
+/* チームごとの色 */
+.team-a {
+  background-color: #d9534f;
+} /* 赤 */
+.team-b {
+  background-color: #428bca;
+} /* 青 */
+.goalkeeper {
+  background-color: #f0ad4e;
+} /* オレンジ */
+
+/* フィールドマーク（クリック不可・背面） */
+.field-line {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  box-sizing: border-box;
+}
+
+.penalty-area,
+.goal-area {
+  border: 3px solid white;
+  background: transparent;
+}
+
+.penalty-spot,
+.center-spot {
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.penalty-arc {
+  position: absolute;
+  width: 175px; /* ≈ 2 * 9.15m を 650px 高さ基準にスケール */
+  height: 175px;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: transparent;
+  transform: translate(-50%, -50%);
+}
+
+/* 角のアーク（1ヤード ≈ 0.914m）*/
+.corner-arc {
+  position: absolute;
+  width: 24px; /* 直径を少し拡大 */
+  height: 24px;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: transparent;
+}

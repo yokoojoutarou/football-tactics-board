@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サッカー戦術ボード</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>サッカー戦術ボード</h1>
+
+    <!-- 描画ツールバー -->
+    <div id="toolbar" aria-label="描画ツール">
+        <button id="penBtn" type="button">ペン (P)</button>
+        <button id="eraserBtn" type="button">消しゴム (E)</button>
+        <label>
+            色
+            <input id="colorPicker" type="color" value="#ff0000" />
+        </label>
+        <label>
+            太さ
+            <input id="sizeRange" type="range" min="2" max="24" value="4" />
+        </label>
+    <button id="clearBtn" type="button">クリア (C)</button>
+    <button id="doneBtn" type="button">終了 (Esc)</button>
+    </div>
+
+    <div id="tactics-board">
+        <div id="field">
+            <!-- 描画レイヤー -->
+            <canvas id="drawLayer"></canvas>
+            <!-- フィールドマーク -->
+            <!-- 左側（Team Aの守備側ゴール） -->
+            <div class="field-line penalty-area" style="top: 125px; left: 0; width: 220px; height: 400px;"></div>
+            <div class="field-line goal-area" style="top: 225px; left: 0; width: 110px; height: 200px;"></div>
+            <div class="penalty-spot" style="top: 325px; left: 132px;"></div>
+            <!-- ペナルティアーク（左）: 右上の四分円のみ表示（左右対称） -->
+            <div class="penalty-arc" style="top: 325px; left: 170px; clip-path: inset(0 0 0% 77%);"></div>
+
+            <!-- 右側（Team Bの守備側ゴール） -->
+            <div class="field-line penalty-area" style="top: 125px; right: 0; width: 220px; height: 400px;"></div>
+            <div class="field-line goal-area" style="top: 225px; right: 0; width: 110px; height: 200px;"></div>
+            <div class="penalty-spot" style="top: 325px; left: 858px;"></div>
+            <!-- ペナルティアーク（右）: 左上の四分円のみ表示（左右対称） -->
+            <div class="penalty-arc" style="top: 325px; left: 820px; clip-path: inset(0 77% 0% 0);"></div>
+
+            <!-- センタースポット -->
+            <div class="center-spot" style="top: 325px; left: 495px;"></div>
+
+            <!-- コーナーアーク（4隅）-->
+            <div class="corner-arc" style="top: -15px; left: -15px; clip-path: inset(50% 0 0 50%);"></div>
+            <div class="corner-arc" style="top: -15px; right: -15px; clip-path: inset(50% 50% 0 0);"></div>
+            <div class="corner-arc" style="bottom: -15px; left: -15px; clip-path: inset(0 0 50% 50%);"></div>
+            <div class="corner-arc" style="bottom: -15px; right: -15px; clip-path: inset(0 50% 50% 0);"></div>
+            <!-- Team A (赤) 4-3-3 左→右に攻撃 -->
+            <!-- GK -->
+            <div class="player team-a goalkeeper" style="top: 311px; left: 20px;">1</div>
+            <!-- DF ライン（左から右へ） -->
+            <div class="player team-a" style="top: 100px; left: 120px;">2</div>
+            <div class="player team-a" style="top: 220px; left: 120px;">3</div>
+            <div class="player team-a" style="top: 430px; left: 120px;">4</div>
+            <div class="player team-a" style="top: 550px; left: 120px;">5</div>
+            <!-- MF ライン -->
+            <div class="player team-a" style="top: 150px; left: 300px;">6</div>
+            <div class="player team-a" style="top: 325px; left: 300px;">7</div>
+            <div class="player team-a" style="top: 500px; left: 300px;">8</div>
+            <!-- FW ライン -->
+            <div class="player team-a" style="top: 160px; left: 450px;">9</div>
+            <div class="player team-a" style="top: 325px; left: 450px;">10</div>
+            <div class="player team-a" style="top: 490px; left: 450px;">11</div>
+
+            <!-- Team B (青) 4-3-3 右→左に攻撃 -->
+            <!-- GK -->
+            <div class="player team-b goalkeeper" style="top: 311px; left: 952px;">1</div>
+            <!-- DF ライン（右側） -->
+            <div class="player team-b" style="top: 100px; left: 852px;">2</div>
+            <div class="player team-b" style="top: 220px; left: 852px;">3</div>
+            <div class="player team-b" style="top: 430px; left: 852px;">4</div>
+            <div class="player team-b" style="top: 550px; left: 852px;">5</div>
+            <!-- MF ライン -->
+            <div class="player team-b" style="top: 150px; left: 672px;">6</div>
+            <div class="player team-b" style="top: 325px; left: 672px;">7</div>
+            <div class="player team-b" style="top: 500px; left: 672px;">8</div>
+            <!-- FW ライン -->
+            <div class="player team-b" style="top: 160px; left: 522px;">9</div>
+            <div class="player team-b" style="top: 325px; left: 522px;">10</div>
+            <div class="player team-b" style="top: 490px; left: 522px;">11</div>
+        </div>
+    </div>
+
+    <script src="player-drag.js"></script>
+    <script src="draw.js"></script>
+</body>
+</html>
